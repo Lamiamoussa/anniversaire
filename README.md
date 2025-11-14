@@ -25,3 +25,5 @@ La page demande un code secret avant de révéler des messages et des confettis.
 1. Télécharger ou cloner le dépôt :
    ```bash
    git clone https://github.com/lamiamoussa/anniversaire.git
+2. Ouvrir index.html dans un navigateur.
+3. Entrer le code secret pour accéder aux messages et confettis.
