@@ -1,0 +1,265 @@
+<!DOCTYPE html> <!-- Indique que le document utilise la dernière version HTML5 -->
+<html lang="fr"> <!-- Le contenu de la page est en français -->
+
+<head> <!-- Section contenant les métadonnées et le style -->
+  <meta charset="UTF-8"> <!-- Permet d'utiliser tous les caractères (accents, emojis...) -->
+  <title>Anniversaire 🎉</title> <!-- Titre affiché dans l'onglet du navigateur -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" /> <!-- Rend la page responsive sur mobile -->
+
+  <style>
+    body { /* Style global du corps de la page */
+      font-family: Arial, sans-serif; /* Définit la police par défaut */
+      text-align: center; /* Centre tout le texte */
+      margin: 0; /* Retire les marges par défaut */
+      padding: 0; /* Retire les espacements internes */
+      min-height: 100vh; /* Force la page à mesurer au minimum tout l'écran */
+      background: linear-gradient(to bottom, #ffe4e1, #fff0f5); /* Dégradé rose */
+      overflow: hidden; /* Empêche le scroll (utile pour les confettis) */
+      position: relative; /* Permet de positionner les confettis par-dessus */
+    }
+
+    h1, p, .message-btn, .message-box { 
+      position: relative; /* Permet de placer le texte au-dessus des confettis */
+      z-index: 2; /* Assure que ces éléments passent devant les confettis */
+    }
+
+    h1 {
+      font-size: 2.2em; /* Taille du titre */
+      margin-top: 36px; /* Espace au-dessus */
+      color: #ff1493; /* Couleur rose vif */
+    }
+
+    p {
+      font-size: 1.1em; /* Taille du texte */
+      color: #ff69b4; /* Couleur rose */
+    }
+
+    .message-btn {
+      padding: 10px 18px; /* Taille interne */
+      font-size: 1em; /* Taille du texte */
+      cursor: pointer; /* Change le curseur au survol */
+      border: none; /* Retire les bordures */
+      border-radius: 6px; /* Angles arrondis */
+      background-color: #ff69b4; /* Couleur du bouton */
+      color: white; /* Couleur du texte */
+      margin: 8px; /* Espace autour */
+      transition: transform 0.15s; /* Animation quand on survole */
+      opacity: 0.95; /* Légère transparence */
+    }
+
+    .message-btn:hover { 
+      transform: scale(1.06); /* Zoom léger */
+      background-color: #ff1493; /* Couleur plus vive au survol */
+    }
+
+    .message-btn[disabled] {
+      opacity: 0.5; /* Affiche un bouton grisé */
+      cursor: not-allowed; /* Curseur "interdit" */
+      transform: none; /* Pas d'effet au survol */
+    }
+
+    .message-box {
+      display: none; /* Cachée tant qu'on n'a pas cliqué */
+      margin: 20px auto; /* Centrée avec marge */
+      padding: 18px; /* Taille interne */
+      max-width: 420px; /* Largeur limitée */
+      background-color: #ffc0cb; /* Fond rose */
+      color: #800000; /* Texte bordeaux */
+      border-radius: 10px; /* Angles arrondis */
+      font-size: 1.05em; /* Taille du texte */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12); /* Ombre légère */
+      white-space: pre-line; /* Préserve les sauts de ligne */
+      z-index: 2; /* Passe au-dessus des confettis */
+    }
+
+    .confetti { /* Style de chaque confetti */
+      position: absolute; /* Placement libre sur l'écran */
+      width: 10px; /* Taille par défaut */
+      height: 10px; /* Taille par défaut */
+      background-color: #ff69b4; /* Couleur initiale */
+      opacity: 0.85; /* Légère transparence */
+      top: -10px; /* Part du haut de l'écran */
+      animation: fall linear infinite; /* Lance l'animation de chute */
+      z-index: 0; /* Derrière le texte */
+      border-radius: 2px; /* Angle légèrement arrondi */
+    }
+
+    @keyframes fall { /* Animation de chute des confettis */
+      to { transform: translateY(110vh) rotate(360deg); } /* Descend en tournant */
+    }
+
+    .pw-overlay {
+      position: fixed; /* Recouvre tout l'écran */
+      inset: 0; /* Colle aux 4 côtés */
+      background: rgba(0,0,0,0.6); /* Fond noir transparent */
+      display: flex; /* Centrage avec flexbox */
+      align-items: center; /* Centre verticalement */
+      justify-content: center; /* Centre horizontalement */
+      z-index: 9999; /* Passe devant TOUT */
+    }
+
+    .pw-card {
+      background: linear-gradient(180deg,#fff0f5,#ffeef7); /* Dégradé rose pale */
+      padding: 22px; /* Espace interne */
+      border-radius: 12px; /* Angles arrondis */
+      box-shadow: 0 8px 28px rgba(0,0,0,0.35); /* Ombre forte */
+      width: 340px; /* Largeur de la boîte */
+      text-align: center; /* Centre le texte */
+      color: #800000; /* Couleur du texte */
+      font-size: 15px; /* Taille du texte */
+    }
+
+    .pw-card input {
+      width: 100%; /* S'adapte à la largeur */
+      padding: 10px; /* Espace interne */
+      margin-top: 10px; /* Espace au-dessus */
+      border-radius: 8px; /* Angles arrondis */
+      border: 1px solid #ffb6c1; /* Bordure rose claire */
+      font-size: 16px; /* Taille du texte */
+      box-sizing: border-box; /* Gère correctement les dimensions */
+    }
+
+    .pw-card button {
+      margin-top: 12px; /* Espace au-dessus */
+      padding: 10px 16px; /* Espace interne */
+      border: none; /* Pas de bordure */
+      border-radius: 8px; /* Angles arrondis */
+      background: #ff69b4; /* Couleur rose */
+      color: white; /* Texte en blanc */
+      cursor: pointer; /* Curseur main */
+      font-size: 15px; /* Taille texte */
+    }
+
+    .pw-error {
+      color: #c00; /* Rouge foncé */
+      margin-top: 8px; /* Espace au-dessus */
+      font-size: 14px; /* Taille texte */
+      display: none; /* Caché par défaut */
+    }
+
+    .pw-note {
+      font-size: 13px; /* Taille texte */
+      color: #a94459; /* Rose foncé */
+      margin-top: 8px; /* Espace au-dessus */
+    }
+
+    @media (max-width:480px) { /* Style appliqué sur petits écrans */
+      .pw-card { width: 90%; padding: 16px; } /* Réduit la boîte */
+      h1 { font-size: 1.6em; margin-top: 20px; } /* Réduit le titre */
+    }
+  </style>
+</head>
+
+<body> <!-- Corps visible de la page -->
+
+  <h1>Bienvenue dans le monde des grands Nawal !</h1> <!-- Titre -->
+  <p>Tu as désormais 22 ans (enfin !) 🎉</p> <!-- Petite phrase -->
+
+  <!-- Quatre boutons de messages, désactivés au départ -->
+  <button class="message-btn" id="btn0" onclick="afficherMessage(0)" disabled>Clique pour un petit message</button>
+  <button class="message-btn" id="btn1" onclick="afficherMessage(1)" disabled>Un autre petit message</button>
+  <button class="message-btn" id="btn2" onclick="afficherMessage(2)" disabled>Encore un message</button>
+  <button class="message-btn" id="btn3" onclick="afficherMessage(3)" disabled>Un petit poème</button>
+
+  <div class="message-box" id="messageBox" aria-live="polite"></div> <!-- Zone où s'affichent les messages -->
+
+  <!-- Overlay du code secret -->
+  <div class="pw-overlay" id="pwOverlay">
+    <div class="pw-card" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+      <h2 id="pwTitle">Entrer le code secret</h2> <!-- Titre de la boîte -->
+      <p>Donne-moi le code pour accéder à ta surprise 🎁</p> <!-- Texte explicatif -->
+      <input id="pwInput" type="password" placeholder="Code secret" autocomplete="off" /> <!-- Champ mot de passe -->
+      <button id="pwBtn">Valider</button> <!-- Bouton de validation -->
+      <div class="pw-error" id="pwError">Code incorrect — réessaie.</div> <!-- Message d'erreur -->
+      <div class="pw-note">Si ça "passe pas", ouvre la console (F12) et regarde s'il y a des erreurs.</div> <!-- Petite aide -->
+    </div>
+  </div>
+
+  <script>
+    const ACCESS_CODE = "2025"; // Code secret attendu
+
+    const messages = [ // Tableau contenant tous les messages affichables
+      "Que cette année t'apporte plein de bonheur et de réussites ! 🌟",
+      "Profite de chaque instant à mes côtés, comme je prends soin de les chérir 💖",
+      "Reste toi-même la femme iconique que tu penses être Nawal ! 🎈",
+      `Trois années à nous côtoyer,
+Une quatrième s’ouvre, porteuse de souvenirs et de promesses,
+Nos éclats de rire résonnent encore au creux de mon cœur,
+Et ta douceur vient apaiser mon esprit,
+Vagabondant parfois au gré de ses divagations éphémères`
+    ];
+
+    const overlay = document.getElementById('pwOverlay'); // Sélectionne l'overlay
+    const pwInput = document.getElementById('pwInput'); // Sélectionne le champ mot de passe
+    const pwBtn = document.getElementById('pwBtn'); // Sélectionne le bouton de validation
+    const pwError = document.getElementById('pwError'); // Sélectionne le message d'erreur
+    const messageBox = document.getElementById('messageBox'); // Sélectionne la zone de message
+    const buttons = [ // Regroupe les 4 boutons dans un tableau
+      document.getElementById('btn0'),
+      document.getElementById('btn1'),
+      document.getElementById('btn2'),
+      document.getElementById('btn3'),
+    ];
+
+    function setButtonsEnabled(enabled) { // Active ou désactive les 4 boutons
+      buttons.forEach(b => b.disabled = !enabled); // Change l'état de disabled selon "enabled"
+    }
+
+    function afficherMessage(index) { // Affiche un message selon son index
+      messageBox.textContent = messages[index]; // Met le texte du message
+      messageBox.style.display = 'block'; // Affiche la boîte de message
+      messageBox.style.backgroundColor = '#ffb6c1'; // Change légèrement la couleur
+    }
+
+    function createConfettis(count = 100) { // Crée "count" confettis animés
+      const colors = ["#ff1493", "#ff69b4", "#ffb6c1", "#fff0f5"]; // Couleurs possibles
+      for (let i = 0; i < count; i++) { // Boucle de création des confettis
+        const confetti = document.createElement('div'); // Crée un élément div
+        confetti.classList.add('confetti'); // Lui ajoute la classe "confetti"
+        confetti.style.left = Math.random() * window.innerWidth + 'px'; // Position horizontale aléatoire
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]; // Couleur aléatoire
+        confetti.style.animationDuration = (2 + Math.random() * 3) + 's'; // Durée d'animation aléatoire
+        const size = 5 + Math.random() * 10; // Taille aléatoire
+        confetti.style.width = size + 'px'; // Applique la largeur
+        confetti.style.height = size + 'px'; // Applique la hauteur
+        confetti.style.transform = `rotate(${Math.random()*360}deg)`; // Angle initial aléatoire
+        document.body.appendChild(confetti); // Ajoute le confetti dans la page
+      }
+    }
+
+    function grantAccess() { // Fonction appelée quand le bon code est entré
+      overlay.style.display = 'none'; // Cache l'overlay
+      overlay.setAttribute('aria-hidden','true'); // Indique que l'overlay n'est plus visible
+      setButtonsEnabled(true); // Active les boutons
+      createConfettis(100); // Lance les confettis
+    }
+
+    setButtonsEnabled(false); // Désactive les boutons au chargement de la page
+
+    pwBtn.addEventListener('click', function() { // Écouteur pour le bouton "Valider"
+      pwError.style.display = 'none'; // Cache l'erreur précédente
+      const val = (pwInput.value || "").trim(); // Récupère ce que l'utilisateur a tapé
+      if (!val) { // Si rien n'est écrit
+        pwError.textContent = "Saisis un code."; // Message d'erreur
+        pwError.style.display = 'block'; // Affiche l'erreur
+        return; // Sort de la fonction
+      }
+      if (val === ACCESS_CODE) { // Si le code est correct
+        grantAccess(); // Cacher l'overlay + activer boutons + confettis
+      } else { // Sinon
+        pwError.textContent = "Code incorrect — réessaie."; // Message d'erreur
+        pwError.style.display = 'block'; // Affiche l'erreur
+      }
+    });
+
+    pwInput.addEventListener('keydown', function(e) { // Écouteur sur le champ de texte
+      if (e.key === 'Enter') pwBtn.click(); // Si l'utilisateur appuie sur Entrée, on valide
+    });
+
+    window.addEventListener('load', function() { // Quand la page a fini de charger
+      pwInput.focus(); // Met automatiquement le focus dans le champ du code
+    });
+  </script>
+
+</body>
+</html>
