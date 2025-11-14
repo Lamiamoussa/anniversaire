@@ -15,6 +15,11 @@ La page demande un code secret avant de révéler des messages et des confettis.
 - Le code par défaut est `2025`.
 - À chaque rafraîchissement de la page, le code doit être ressaisi.
 
+## Apprentissage
+
+- Chaque ligne du fichier HTML est commentée avec `//` ou `<!-- -->` pour expliquer ce qu'elle fait.  
+- Cela me permet d'apprendre le HTML et de comprendre chaque instruction étape par étape.
+
 ## Comment tester
 
 1. Télécharger ou cloner le dépôt :
