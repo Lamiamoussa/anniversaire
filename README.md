@@ -19,4 +19,4 @@ La page demande un code secret avant de révéler des messages et des confettis.
 
 1. Télécharger ou cloner le dépôt :
    ```bash
-   git clone https://github.com/tonpseudo/anniv-nawal.git
+   git clone https://github.com/lamiamoussa/anniversaire.git
